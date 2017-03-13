@@ -1,0 +1,23 @@
+export PS1="[gcloud-cli] \e[38;5;45m\W\e[0m # "
+
+kubectl() {
+  docker run --rm \
+    -u $UID:$GID \
+    -e GOOGLE_APPLICATION_CREDENTIALS=/.config/gcloud/application_default_credentials.json \
+    -v $GCLOUD_WORKSPACE:$GCLOUD_WORKSPACE \
+    --volumes-from gcloud-config \
+    -w $GCLOUD_WORKSPACE/config \
+    lachlanevenson/k8s-kubectl "$@"
+}
+
+gcloud() {
+  docker run -it --rm -u $UID:$GID --volumes-from gcloud-config google/cloud-sdk gcloud "$@"
+}
+
+gcutil() {
+  docker run -it --rm -u $UID:$GID --volumes-from gcloud-config google/cloud-sdk gcutil "$@"
+}
+
+gsutil() {
+  docker run -it --rm -u $UID:$GID --volumes-from gcloud-config google/cloud-sdk gsutil "$@"
+}
